@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 function App() {
   return (
-    <section className="min-h-screen flex w-screen bg-[#F8FAFF] flex-col">
+    <section className="min-h-screen flex w-screen bg-[#F8FAFF] bg-[url(https://img.freepik.com/free-vector/neumorphic-style-blank-white-banner-with-slanting-lines-design_1017-53841.jpg?semt=ais_hybrid&w=740)] bg-cover flex-col">
       <Navbar />
       <div className="w-full h-125 flex font-inter items-center justify-center mt-15">
         <div className='flex flex-col items-center justify-center ml-10 gap-8'>
