@@ -2,20 +2,8 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
 import { Link } from 'react-router-dom'
-import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from './lib/firebaseClient'
+
 function App() {
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    // When a user is logged in or signed up we are setting the user object from our firebase into our user state
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser)
-    })
-    // The onAuthStateChanged returns an unsubscribe function that we call when the user leaves the tab or browser so our listener for user changes doesn't keep running
-    return unsubscribe
-  }, [])
-
   return (
     <section className="min-h-screen flex w-screen bg-[#F8FAFF] flex-col">
       <Navbar />
