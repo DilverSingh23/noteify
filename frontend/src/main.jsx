@@ -3,11 +3,13 @@ import { createRoot } from 'react-dom/client'
 import "./App.css"
 import App from './App.jsx'
 import Login from './Login.jsx'
+import Signup from './Signup.jsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 
 const router = createBrowserRouter([
   {path: "/", element: <App />},
-  {path: "/login", element: <Login />}
+  {path: "/login", element: <Login />},
+  {path: "/signup", element: <Signup />}
 ])
 
 createRoot(document.getElementById('root')).render(

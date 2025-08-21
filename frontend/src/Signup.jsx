@@ -2,7 +2,7 @@ import React from "react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
 
-const Login = () => {
+const Signup = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     return (
@@ -14,7 +14,7 @@ const Login = () => {
                         <h1 className="font-inter text-black text-4xl font-extrabold">noteify</h1>
                     </div>
                 </Link>
-                <h1 className="text-black font-inter text-2xl font-bold self-center mt-5">Log In</h1>
+                <h1 className="text-black font-inter text-2xl font-bold self-center mt-5">Sign Up</h1>
                 <form className="flex gap-12 flex-col" onSubmit={() => handleLogin}>
                     <div className="flex justify-start font-inter flex-col gap-3">
                         <label className="font-bold text-2xl">Email</label>
@@ -36,11 +36,11 @@ const Login = () => {
                             required
                         ></input>
                     </div>
-                    <button type="submit" className="font-bold bg-[#787CFF] text-white w-30 p-3 rounded-3xl self-center hover:bg-pink-200 hover:cursor-pointer hover:text-black">Log In</button>
+                    <button type="submit" className="font-bold bg-[#787CFF] text-white w-30 p-3 rounded-3xl self-center hover:bg-pink-200 hover:cursor-pointer hover:text-black">Sign Up</button>
                 </form>
             </div>
         </section>
     )
 }
 
-export default Login
+export default Signup

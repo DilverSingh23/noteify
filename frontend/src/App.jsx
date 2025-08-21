@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
+import { Link } from 'react-router-dom'
 function App() {
 
   return (
@@ -17,9 +18,11 @@ function App() {
           <h2 className="text-gray-400 text-light text-[22px] w-150 text-center">
             Stop juggling <b>apps</b> and <b>sticky notes</b>. Noteify keeps everything <i>organized</i>, <i>synced</i>, and <i>ready when you are</i>.
           </h2>
-          <button className="bg-[#787CFF] font-inter text-white font-extrabold p-5 pl-6 pr-6 rounded-4xl hover:text-black hover:bg-pink-200 hover:cursor-pointer mt-10 text-xl">
-            Start Taking Notes
-          </button>
+          <Link to={"/login"}>
+            <button className="bg-[#787CFF] font-inter text-white font-extrabold p-5 pl-6 pr-6 rounded-4xl hover:text-black hover:bg-pink-200 hover:cursor-pointer mt-10 text-xl">
+              Start Taking Notes
+            </button>
+          </Link>
         </div>
         <img src="./noteify-landing.png" className='h-90 w-185'/>
       </div>

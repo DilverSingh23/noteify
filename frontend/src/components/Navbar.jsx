@@ -14,7 +14,9 @@ const Navbar = () => {
                 <Link to={"/login"}>
                     <button className="bg-[#787CFF] font-inter text-white font-bold p-3 pl-5 pr-4 rounded-3xl hover:text-black hover:bg-pink-200 hover:cursor-pointer">Log In</button>
                 </Link>
-                <button className="bg-[#787CFF] font-inter text-white font-bold p-3 pl-5 pr-4 rounded-3xl hover:text-black hover:bg-pink-200 hover:cursor-pointer">Sign Up</button>
+                <Link to={"/signup"}>
+                    <button className="bg-[#787CFF] font-inter text-white font-bold p-3 pl-5 pr-4 rounded-3xl hover:text-black hover:bg-pink-200 hover:cursor-pointer">Sign Up</button>
+                </Link>
             </div>
         </div>
     )
