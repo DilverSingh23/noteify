@@ -51,6 +51,10 @@ router.post("/createNote", verifyToken, async(req, res) => {
             res.status(404).json({ error: "Note limit reached. Delete a note to make a new one."})
             return
         }
+        if (!req.body.title || !req.body.message) {
+            res.status(404).json({ error: "Your title or message can not be empty!" })
+            return
+        }
         const newNote = {
             userId: req.user.uid,
             title: req.body.title,
@@ -72,8 +76,8 @@ router.patch("/updateNote/:id", verifyToken, async (req, res) => {
         const noteId = { _id: ObjectId.createFromHexString(req.params.id) }
         const newTitle = req.body.title
         const newMessage = req.body.message
-        if (newTitle.length == 0 || newMessage.length == 0) {
-            res.status(404).json({ error: "Your title or message can not be empty!" })
+        if (!newTitle|| !newMessage) {
+            res.status(400).json({ error: "Your title or message can not be empty!" })
             return
         }
         const updates = {

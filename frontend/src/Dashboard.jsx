@@ -13,9 +13,11 @@ import { useState } from "react"
 const Dashboard = ({ user }) => {
     const currentUser = JSON.parse(user)
     const [notes, setNotes] = useState([])
+    const [currentNoteId, setCurrentNoteId] = useState("")
     const [title, setTitle] = useState("")
     const [message, setMessage] = useState("")
     const [open, setOpen] = useState(false)
+    const [editing, setEditing] = useState(false)
     const navigate = useNavigate()
 
     const handleSignout = async () => {
@@ -46,7 +48,7 @@ const Dashboard = ({ user }) => {
             setNotes(userNotes)
         } catch (error) {
             console.error("Error: ", error)
-            alert("Error fetching notes: ", error)
+            alert("Error fetching notes: " + error)
         }
     }
 
@@ -71,15 +73,47 @@ const Dashboard = ({ user }) => {
                 getNotes()
             }
         } catch (error) {
-            console.error("Error: " + error)
+            console.error("Error: ", error)
             alert("Error creating note: " + error)
         }
     }
 
-    const editNote = () => {
-
+    const editNote = (noteId, noteTitle, noteMessage) => {
+        setCurrentNoteId(noteId)
+        setTitle(noteTitle)
+        setMessage(noteMessage)
+        setEditing(true)
+        setOpen(true)
     }
 
+    const updateNote = async(title, message) => {
+        try {
+            const token = await auth.currentUser.getIdToken()
+            const response = await fetch(`http://localhost:5050/updateNote/${currentNoteId}`, {
+                method: "PATCH",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ title, message })
+            })
+            if (response.ok){
+                setOpen(false)
+                setEditing(false)
+                setTitle("")
+                setMessage("")
+                setCurrentNoteId("")
+                getNotes()
+            }
+        } catch (error) {
+            console.error("Error: ", error)
+            alert("Error updating note: " + error)
+        }
+    }
+
+    const deleteNote = async(noteId) => {
+    }
+ 
 
     useEffect(() => {
         getNotes()
@@ -126,8 +160,8 @@ const Dashboard = ({ user }) => {
                             <h1 className="text-[#787CFF] font-extrabold text-xl text-center truncate w-full h-10">{note.title}</h1>
                             <p className="text-black font-normal text-m w-full h-full overflow-y-scroll pt-3 pb-3 whitespace-pre-wrap">{note.message}</p>
                             <div className="flex w-full h-fit gap-5">
-                                <FaPencil className="hover:text-[#787CFF] hover:cursor-pointer ml-auto" />
-                                <FaRegTrashCan className="hover:text-[#787CFF] hover:cursor-pointer" />
+                                <FaPencil className="hover:text-[#787CFF] hover:cursor-pointer ml-auto" onClick={() => editNote(note._id, note.title, note.message)} />
+                                <FaRegTrashCan className="hover:text-[#787CFF] hover:cursor-pointer" onClick={() => deleteNote(note._id)} />
                             </div>
                         </div>
                     ))}
@@ -142,11 +176,12 @@ const Dashboard = ({ user }) => {
                         </div>
                         <form className="flex flex-col gap-10 font-inter w-full pt-5" onSubmit={(e) => {
                             e.preventDefault()
-                            createNote(title, message)
+                            !editing ? createNote(title, message) : updateNote(title, message)
                         }}>
                             <input
                                 type="text"
                                 placeholder="Enter title"
+                                value={title}
                                 className="text-black bg-white p-2 w-full border-1 rounded-2xl"
                                 onChange={(e) => setTitle(e.target.value)} 
                             ></input>
@@ -158,7 +193,7 @@ const Dashboard = ({ user }) => {
                                 className="text-black bg-white p-2 w-full border-1 rounded-2xl"
                                 onChange={(e) => setMessage(e.target.value)}
                             ></textarea>
-                            <MainButton text={"Create"} type="submit" />
+                            <MainButton text={!editing ? "Create" : "Update"} type="submit" />
                         </form>
                     </div>
                 </div>
