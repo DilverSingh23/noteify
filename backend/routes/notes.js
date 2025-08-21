@@ -1,16 +1,16 @@
 import db from "../db/connnections.js"
 import { ObjectId } from "mongodb"
 import express from "express"
+import verifyToken from "../auth/middleware.js"
 
 const router = express.Router()
 let notesCollection = db.collection("notes")
 
 // Get all user notes
-router.get("/user/:userId", async (req, res) => {
+router.get("/notes", verifyToken, async (req, res) => {
     try {
-        const id = parseInt(req.params.userId, 10)
         const userNotes = await notesCollection
-            .find({ userId: id})
+            .find({ userId: req.user.uid})
             .sort({ updatedAt: -1 })
             .toArray()
 
@@ -23,11 +23,10 @@ router.get("/user/:userId", async (req, res) => {
 })
 
 // Read a specific user note
-router.get("/note/:id", async (req, res) => {
+router.get("/notes/:id", verifyToken, async (req, res) => {
     try {
-        const userId = parseInt(req.params.userId, 10)
         const noteId = ObjectId.createFromHexString(req.params.id)
-        const userNote = await notesCollection.findOne({ _id: noteId, userId: userId})
+        const userNote = await notesCollection.findOne({ _id: noteId })
         if (userNote) {
             res.status(200).json(userNote)
         }
@@ -42,10 +41,10 @@ router.get("/note/:id", async (req, res) => {
 })
 
 // Create a new note
-router.post("/createNote", async(req, res) => {
+router.post("/createNote", verifyToken, async(req, res) => {
     try {
         const userNotes = await notesCollection
-            .find({ userId: req.params.userId })
+            .find({ userId: req.user.uid })
             .toArray()
         if (userNotes.length == 10) {
             console.log("Reached note limit.")
@@ -53,7 +52,7 @@ router.post("/createNote", async(req, res) => {
             return
         }
         const newNote = {
-            userId: req.body.userId,
+            userId: req.user.uid,
             title: req.body.title,
             message: req.body.message,
             lastUpdated: new Date()
@@ -68,7 +67,7 @@ router.post("/createNote", async(req, res) => {
 })
 
 // Edit an existing note
-router.patch("/updateNote/:id", async (req, res) => {
+router.patch("/updateNote/:id", verifyToken, async (req, res) => {
     try {
         const noteId = { _id: ObjectId.createFromHexString(req.params.id) }
         const newTitle = req.body.title
@@ -100,7 +99,7 @@ router.patch("/updateNote/:id", async (req, res) => {
 })
 
 // Delete an existing note
-router.delete("/deleteNote/:id", async (req, res) => {
+router.delete("/deleteNote/:id", verifyToken, async (req, res) => {
     try {
         const noteId = { _id: ObjectId.createFromHexString(req.params.id) }
         let result = await notesCollection.deleteOne(noteId)

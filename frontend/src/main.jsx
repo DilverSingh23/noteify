@@ -22,10 +22,10 @@ const Root = () => {
 
 
   const router = createBrowserRouter([
-    {path: "/", element: !user ? <App /> : <Dashboard userId={user.uid} userEmail={user.email} />},
-    {path: "/login", element: !user ? <Login /> : <Dashboard userId={user.uid} userEmail={user.email} />},
-    {path: "/signup", element: !user ? <Signup /> : <Dashboard userId={user.uid} userEmail={user.email} />},
-    {path:"/dashboard", element: user ? <Dashboard userId={user.uid} userEmail={user.email} /> : <App />}
+    {path: "/", element: !user ? <App /> : <Dashboard user={JSON.stringify(user)} />},
+    {path: "/login", element: !user ? <Login /> : <Dashboard user={JSON.stringify(user)} />},
+    {path: "/signup", element: !user ? <Signup /> : <Dashboard user={JSON.stringify(user)} />},
+    {path:"/dashboard", element: user ? <Dashboard user={JSON.stringify(user)} /> : <App />}
   ])
 
   return <RouterProvider router={router} />
