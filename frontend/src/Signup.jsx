@@ -3,6 +3,7 @@ import React from "react"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { auth } from "./lib/firebaseClient"
+import MainButton from "./components/MainButton"
 
 const Signup = () => {
     const [email, setEmail] = useState("")
@@ -51,7 +52,7 @@ const Signup = () => {
                             required
                         ></input>
                     </div>
-                    <button type="submit" className="font-bold bg-[#787CFF] text-white w-30 p-3 rounded-3xl self-center hover:bg-pink-200 hover:cursor-pointer hover:text-black">Sign Up</button>
+                    <MainButton text={"Sign Up"} />
                 </form>
             </div>
         </section>

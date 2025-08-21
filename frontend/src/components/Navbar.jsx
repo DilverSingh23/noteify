@@ -1,5 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import MainButton from "./MainButton"
 
 const Navbar = () => {
     return (
@@ -12,10 +13,10 @@ const Navbar = () => {
             </Link>
             <div className="flex w-fit items-center justify-center gap-3">
                 <Link to={"/login"}>
-                    <button className="bg-[#787CFF] font-inter text-white font-bold p-3 pl-5 pr-4 rounded-3xl hover:text-black hover:bg-pink-200 hover:cursor-pointer">Log In</button>
+                    <MainButton text={"Log In"}/>
                 </Link>
                 <Link to={"/signup"}>
-                    <button className="bg-[#787CFF] font-inter text-white font-bold p-3 pl-5 pr-4 rounded-3xl hover:text-black hover:bg-pink-200 hover:cursor-pointer">Sign Up</button>
+                    <MainButton text={"Sign Up"} />
                 </Link>
             </div>
         </div>
