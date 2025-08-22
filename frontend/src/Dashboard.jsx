@@ -57,6 +57,9 @@ const Dashboard = ({ user }) => {
             if (!title || !message) {
                 alert("You can't submit an empty title or message!")
             }
+            if (notes.length == 10) {
+                alert("You are at the 10 note limit! Delete a note to create a new one.")
+            }
             const token = await auth.currentUser.getIdToken()
             const response = await fetch("http://localhost:5050/createNote", {
                 method: "POST",
@@ -112,6 +115,23 @@ const Dashboard = ({ user }) => {
     }
 
     const deleteNote = async(noteId) => {
+        try {
+            const token = await auth.currentUser.getIdToken()
+            const response = await fetch(`http://localhost:5050/deleteNote/${noteId}`, {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            })
+            
+            if (response.ok) {
+                getNotes()
+            }
+        } catch(error) {
+            console.error("Error: ", error)
+            alert("Error deleting note: " + error)
+        }
     }
  
 
@@ -159,7 +179,8 @@ const Dashboard = ({ user }) => {
                         <div key={note._id} className="w-120 h-100 bg-gray-100 font-inter p-8 flex items-center flex-col gap-4 rounded-2xl shadow-2xl">
                             <h1 className="text-[#787CFF] font-extrabold text-xl text-center truncate w-full h-10">{note.title}</h1>
                             <p className="text-black font-normal text-m w-full h-full overflow-y-scroll pt-3 pb-3 whitespace-pre-wrap">{note.message}</p>
-                            <div className="flex w-full h-fit gap-5">
+                            <div className="flex w-full h-fit gap-5 items-center">
+                                <h1 className="w-fit rounded-3xl p-4 font-inter font-bold bg-black text-xs text-white">{new Date(note.lastUpdated).toLocaleDateString()}</h1>
                                 <FaPencil className="hover:text-[#787CFF] hover:cursor-pointer ml-auto" onClick={() => editNote(note._id, note.title, note.message)} />
                                 <FaRegTrashCan className="hover:text-[#787CFF] hover:cursor-pointer" onClick={() => deleteNote(note._id)} />
                             </div>

@@ -11,7 +11,7 @@ router.get("/notes", verifyToken, async (req, res) => {
     try {
         const userNotes = await notesCollection
             .find({ userId: req.user.uid})
-            .sort({ updatedAt: -1 })
+            .sort({ lastUpdated: -1 })
             .toArray()
 
         res.status(200).json(userNotes)
