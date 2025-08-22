@@ -23,36 +23,36 @@ const Signup = () => {
 
     return (
         <section className="w-screen min-h-screen flex justify-center items-center">
-            <div className="w-150 h-145 flex items-center flex-col bg-gray-200 rounded-3xl shadow-2xl">
+            <div className="min-[800px]:w-150 min-[800px]:h-145 w-95 h-100 flex items-center flex-col bg-gray-200 rounded-3xl shadow-2xl">
                 <Link to={"/"}>
                     <div className="flex w-fit items-center justify-center gap-4 mt-10 hover:cursor-pointer">
-                        <img className="h-15 w-15"src="/noteify-logo.png" />
-                        <h1 className="font-inter text-black text-4xl font-extrabold">noteify</h1>
+                        <img className="min-[800px]:h-15 min-[800px]:w-15 h-8 w-8"src="/noteify-logo.png" />
+                        <h1 className="font-inter text-black min-[800px]:text-4xl text-2xl font-extrabold">noteify</h1>
                     </div>
                 </Link>
-                <h1 className="text-black font-inter text-2xl font-bold self-center mt-5">Sign Up</h1>
-                <form className="flex gap-12 flex-col" onSubmit={(e) => handleSignup(e)}>
+                <h1 className="text-black font-inter min-[800px]:text-2xl text-lg font-bold self-center mt-5">Sign Up</h1>
+                <form className="flex min-[800px]:gap-12 gap-5 flex-col" onSubmit={(e) => handleSignup(e)}>
                     <div className="flex justify-start font-inter flex-col gap-3">
-                        <label className="font-bold text-2xl">Email</label>
+                        <label className="font-bold min-[800px]:text-2xl text-lg">Email</label>
                         <input
                             type="email"
-                            className="bg-white text-black font-normal w-105 h-10 p-3"
+                            className="bg-white text-black font-normal min-[800px]:w-105 w-75 h-10 p-3"
                             placeholder="Enter your email"
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         ></input>
                     </div>
                     <div className="flex justify-start font-inter flex-col gap-3">
-                        <label className="font-bold text-2xl">Password</label>
+                        <label className="font-bold min-[800px]:text-2xl text-lg">Password</label>
                         <input
                             type="password"
-                            className="bg-white text-black font-normal w-105 h-10 p-3"
+                            className="bg-white text-black font-normal min-[800px]:w-105 w-75 h-10 p-3"
                             placeholder="Enter your password"
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         ></input>
                     </div>
-                    <div className="flex flex-col items-center w-full h-fit gap-10">
+                    <div className="flex flex-col items-center w-full h-fit max-[800px]:gap-20">
                         <MainButton text={"Sign Up"}/>
                         <h1 className="font-inter font-semibold text-lg">Already have an account? <Link to={"/login"}><span className="underline text-[#787CFF]">Log In</span></Link></h1>
                     </div>

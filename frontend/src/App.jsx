@@ -8,15 +8,15 @@ function App() {
   return (
     <section className="min-h-screen flex w-screen bg-[#F8FAFF] bg-[url(https://img.freepik.com/free-vector/neumorphic-style-blank-white-banner-with-slanting-lines-design_1017-53841.jpg?semt=ais_hybrid&w=740)] bg-contain flex-col">
       <Navbar />
-      <div className="w-full h-125 flex font-inter items-center justify-center mt-15">
-        <div className='flex flex-col items-center justify-center ml-10 gap-8'>
-          <div className='flex items-center justify-center flex-col min-[1440px]:text-[75px] text-[60px]'>
+      <div className="w-full h-125 flex font-inter max-[1250px]:flex-col items-center justify-center max-[1250px]:mt-40 max-[700px]:mt-17 mt-15 ">
+        <div className='flex flex-col items-center justify-center min-[1250px]:ml-10 ml-0 gap-8'>
+          <div className='flex items-center justify-center flex-col min-[1440px]:text-[75px] min-[700px]:text-[60px] text-[40px]'>
             <h1 className='text-black font-bold '>All your notes,</h1>
             <h1 className='bg-gradient-to-r from-[#4B4FCF] via-[#787CFF] to-[#B3B6FF] bg-clip-text text-transparent font-extrabold'>
               without the clutter
             </h1>
           </div>
-          <h2 className="text-gray-400 text-light text-[22px] w-150 text-center">
+          <h2 className="text-gray-400 text-light min-[700px]:text-[22px] text-[15px] min-[700px]:w-150 min-[430px]:w-100 w-85 text-center">
             Stop juggling <b>apps</b> and <b>sticky notes</b>. Noteify keeps everything <i>organized</i>, <i>synced</i>, and <i>ready when you are</i>.
           </h2>
           <Link to={"/login"}>
@@ -25,14 +25,14 @@ function App() {
             </button>
           </Link>
         </div>
-        <img src="./noteify-landing.png" className='h-90 w-185'/>
+        <img src="./noteify-landing.png" className='h-90 w-185 max-[700px]:h-60 max-[700px]:w-135'/>
       </div>
-      <div className='flex flex-col justify-center items-center mt-35 gap-10 bg-[#787CFF] rounded-4xl w-fit self-center p-10 shadow-2xl'>
-        <h1 className='font-inter text-white font-bold text-[28px]'>Noteify securely saves all your notes in one place — private, organized, and only visible to you.</h1>
-        <img className="w-260 h-150 rounded-3xl shadow-2xl"src="/noteify-dashboard.png" />
+      <div className='flex flex-col justify-center items-center mt-35 max-[1250px]:mt-60 gap-10 bg-[#787CFF] rounded-4xl w-fit self-center p-10 shadow-2xl max-[700px]:hidden'>
+        <h1 className='font-inter text-white font-bold max-[1100px]:text-[15px] text-[28px]'>Noteify saves all your notes in one place — private, organized, and only visible to you.</h1>
+        <img className="min-[1100px]:w-250 min-[1100px]:h-140 w-150 h-85 rounded-3xl shadow-2xl"src="/noteify-dashboard.png" />
       </div>
       <div className='flex w-full h-150 items-center justify-center mt-10'>
-        <div className='grid grid-cols-4 gap-7 place-items-center w-fit h-100'>
+        <div className='grid min-[1330px]:grid-cols-4 min-[750px]:grid-cols-2 grid-cols-1 gap-7 place-items-center w-fit h-100'>
           <div className='flex flex-col justify-center items-center font-inter gap-3'>
             <img src="/noteify-read.png" className='rounded-2xl w-60 h-50 border-2 shadow-xl' />
             <h2 className='font-extrabold text-xl text-[#787CFF]'>View</h2>
@@ -55,7 +55,7 @@ function App() {
           </div>
         </div>
       </div>
-      <div className='flex flex-col font-inter text-black text-6xl w-full h-full justify-center items-center font-extrabold gap-5 mb-50 mt-10 
+      <div className='flex flex-col font-inter text-black max-[425px]:text-2xl max-[850px]:text-3xl text-6xl w-full h-full justify-center items-center font-extrabold gap-5 mb-50 min-[1330px]:mt-10 min-[750px]:mt-50 mt-200
       bg-[url(https://img.freepik.com/free-vector/neumorphic-style-blank-white-banner-with-slanting-lines-design_1017-53841.jpg?semt=ais_hybrid&w=740)] bg-cover '>
         <h1>Ready to declutter your mind?</h1>
         <h1 className='bg-gradient-to-r from-[#4B4FCF] via-[#787CFF] to-[#B3B6FF] bg-clip-text text-transparent font-extrabold h-20'>
