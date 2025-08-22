@@ -38,7 +38,7 @@ const Dashboard = ({ user }) => {
         try {
             const token = await auth.currentUser.getIdToken()
             console.log(token)
-            const response = await fetch("http://localhost:5050/notes", {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/notes`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
@@ -61,7 +61,7 @@ const Dashboard = ({ user }) => {
                 alert("You are at the 10 note limit! Delete a note to create a new one.")
             }
             const token = await auth.currentUser.getIdToken()
-            const response = await fetch("http://localhost:5050/createNote", {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/createNote`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -92,7 +92,7 @@ const Dashboard = ({ user }) => {
     const updateNote = async(title, message) => {
         try {
             const token = await auth.currentUser.getIdToken()
-            const response = await fetch(`http://localhost:5050/updateNote/${currentNoteId}`, {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/updateNote/${currentNoteId}`, {
                 method: "PATCH",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -117,7 +117,7 @@ const Dashboard = ({ user }) => {
     const deleteNote = async(noteId) => {
         try {
             const token = await auth.currentUser.getIdToken()
-            const response = await fetch(`http://localhost:5050/deleteNote/${noteId}`, {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/deleteNote/${noteId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`,
