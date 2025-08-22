@@ -38,7 +38,7 @@ const Dashboard = ({ user }) => {
         try {
             const token = await auth.currentUser.getIdToken()
             console.log(token)
-            const response = await fetch(`http://localhost:5050/notes`, {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/notes`, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json"
