@@ -165,7 +165,19 @@ const Dashboard = ({ user }) => {
             </div>
             <div className="flex font-inter flex-col h-screen w-screen pt-15 pl-15 gap-15 overflow-y-auto bg-[url(https://img.freepik.com/free-vector/white-abstract-wallpaper_23-2148830026.jpg)] bg-cover shadow-sm">
                 <h1 className="text-black font-extrabold text-4xl">👋 Hi, {currentUser.email.slice(0, currentUser.email.length - 10)}! <span className="bg-[#B3B6FF] rounded-xl p-2">Welcome to your dashboard.</span></h1>
-                <h1 className="text-black font-semibold text-4xl">My Notes</h1>
+                <div className="flex gap-3">
+                    <h1 className="text-black font-semibold text-4xl items-center">My Notes</h1>
+                    <h1 className="text-black bg-gray-200 rounded-4xl h-10 w-10 p-2 pl-3.5 border-1">{notes.length}</h1>
+                    {notes.length > 0 && (
+                        <div className="flex min-[1470px]:ml-190 min-[1270px]:ml-170 ml-100 w-35 bg-[#787CFF] items-center justify-center rounded-3xl p-3 pl-5 pr-4 text-white
+                         hover:text-black hover:bg-pink-200 hover:cursor-pointer gap-3" onClick={() => popUp()}>
+                            <FaPlus />
+                            <h1 className="font-inter font-bold">
+                                New Note
+                            </h1>
+                        </div>
+                    )}
+                </div>
                 {notes.length == 0 && (
                     <div className="flex w-60 bg-[#787CFF] items-center justify-center rounded-3xl p-3 pl-5 pr-4 text-white hover:text-black hover:bg-pink-200 hover:cursor-pointer gap-3" onClick={() => popUp()}>
                         <FaPlus />
@@ -176,7 +188,7 @@ const Dashboard = ({ user }) => {
                 )}
                 <div className="grid min-[1250px]:grid-cols-2 gap-4 grid-cols-1 mb-8">
                     {notes.map((note) => (
-                        <div key={note._id} className="w-120 h-100 bg-gray-100 font-inter p-8 flex items-center flex-col gap-4 rounded-2xl shadow-2xl">
+                        <div key={note._id} className="w-120 h-105 bg-gray-100 font-inter p-8 flex items-center flex-col gap-4 rounded-2xl shadow-2xl">
                             <h1 className="text-[#787CFF] font-extrabold text-xl text-center truncate w-full h-10">{note.title}</h1>
                             <p className="text-black font-normal text-m w-full h-full overflow-y-scroll pt-3 pb-3 whitespace-pre-wrap">{note.message}</p>
                             <div className="flex w-full h-fit gap-5 items-center">
@@ -193,7 +205,13 @@ const Dashboard = ({ user }) => {
                     <div className="absolute inset-0 bg-black/50" />
                     <div className="relative bg-gray-100 w-140 h-135 rounded-3xl p-8 border-2">
                         <div className="w-full">
-                            <MdOutlineCancel className="ml-auto w-5 h-fit hover:text-red-500 hover:cursor-pointer" onClick={() => setOpen(false)} />
+                            <MdOutlineCancel className="ml-auto w-5 h-fit hover:text-red-500 hover:cursor-pointer" 
+                            onClick={() => {
+                                setOpen(false)
+                                setTitle("")
+                                setMessage("")
+                            }
+                                } />
                         </div>
                         <form className="flex flex-col gap-10 font-inter w-full pt-5" onSubmit={(e) => {
                             e.preventDefault()

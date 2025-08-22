@@ -23,7 +23,7 @@ const Signup = () => {
 
     return (
         <section className="w-screen min-h-screen flex justify-center items-center">
-            <div className="w-150 h-125 flex items-center flex-col bg-gray-200 rounded-2xl">
+            <div className="w-150 h-145 flex items-center flex-col bg-gray-200 rounded-3xl shadow-2xl">
                 <Link to={"/"}>
                     <div className="flex w-fit items-center justify-center gap-4 mt-10 hover:cursor-pointer">
                         <img className="h-15 w-15"src="/noteify-logo.png" />
@@ -52,7 +52,10 @@ const Signup = () => {
                             required
                         ></input>
                     </div>
-                    <MainButton text={"Sign Up"} />
+                    <div className="flex flex-col items-center w-full h-fit gap-10">
+                        <MainButton text={"Sign Up"}/>
+                        <h1 className="font-inter font-semibold text-lg">Already have an account? <Link to={"/login"}><span className="underline text-[#787CFF]">Log In</span></Link></h1>
+                    </div>
                 </form>
             </div>
         </section>
