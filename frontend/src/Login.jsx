@@ -1,9 +1,9 @@
-import { signInWithEmailAndPassword } from "firebase/auth"
 import React from "react"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { auth } from "./lib/firebaseClient"
 import MainButton from "./components/MainButton"
+import { userPool } from "./lib/cognitoConfig"
+import { AuthenticationDetails, CognitoUser } from "amazon-cognito-identity-js"
 
 const Login = () => {
     const [email, setEmail] = useState("")
@@ -11,13 +11,27 @@ const Login = () => {
     const navigate = useNavigate()
 
     const handleLogin = async(e) => {
-        e.preventDefault()
-        try {
-            await signInWithEmailAndPassword(auth, email, password)
-            navigate("/")
-        } catch(error) {
-            alert("Login failed: " + error)
-        }
+        e.preventDefault();
+        const user = new CognitoUser({
+            Username: email,
+            Pool: userPool
+        });
+
+        const authDetails = new AuthenticationDetails({
+            Username: email,
+            Password: password
+        });
+
+        user.authenticateUser(authDetails, {
+            onSuccess: (result) => {
+                console.log("User logged in successfully." + result)
+                navigate("/")
+            },
+            onFailure: (err) => {
+                alert("User log in failed " + err)
+                console.error("User log in failed: ", err)
+            }
+        })
     }
     return (
         <section className="w-screen min-h-screen flex justify-center items-center">

@@ -1,6 +1,4 @@
-import { getIdToken, signOut } from "firebase/auth"
 import React from "react"
-import { auth } from "./lib/firebaseClient"
 import { useNavigate } from "react-router-dom"
 import MainButton from "./components/MainButton"
 import { FaPlus, FaPencil, FaRegTrashCan } from "react-icons/fa6";
@@ -8,6 +6,7 @@ import { MdOutlineCancel } from "react-icons/md"
 import { FaSignOutAlt } from "react-icons/fa";
 import { useEffect } from "react"
 import { useState } from "react"
+import { getCurrentUser, userPool } from "./lib/cognitoConfig";
 
 
 const Dashboard = ({ user }) => {
@@ -22,9 +21,11 @@ const Dashboard = ({ user }) => {
 
     const handleSignout = async () => {
         try {
-            await signOut(auth)
-            navigate("/")
-
+            const cognitoUser = userPool.getCurrentUser()
+            if (cognitoUser) {
+                cognitoUser.signOut();
+                navigate("/")
+            }
         } catch (error) {
             alert("Sign out failed: " + error)
         }
@@ -36,16 +37,17 @@ const Dashboard = ({ user }) => {
 
     const getNotes = async() => {
         try {
-            const token = await auth.currentUser.getIdToken()
-            console.log(token)
-            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/notes`, {
+            const user = await getCurrentUser();
+            console.log(user.idToken)
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/getUserNotes`, {
                 headers: {
-                    "Authorization": `Bearer ${token}`,
+                    "Authorization": `Bearer ${user.idToken}`,
                     "Content-Type": "application/json"
                 }
             })  
             const userNotes = await response.json()
-            setNotes(userNotes)
+            console.log(userNotes)
+            setNotes(userNotes) 
         } catch (error) {
             console.error("Error: ", error)
             alert("Error fetching notes: " + error)
@@ -60,11 +62,11 @@ const Dashboard = ({ user }) => {
             if (notes.length == 10) {
                 alert("You are at the 10 note limit! Delete a note to create a new one.")
             }
-            const token = await auth.currentUser.getIdToken()
-            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/createNote`, {
+            const user = await getCurrentUser();
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/createNotes`, {
                 method: "POST",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
+                    "Authorization": `Bearer ${user.idToken}`,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ title, message })
@@ -94,20 +96,23 @@ const Dashboard = ({ user }) => {
             if (!title || !message) {
                 alert("You can't submit an empty title or message!")
             }
-            const token = await auth.currentUser.getIdToken()
-            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/updateNote/${currentNoteId}`, {
+            const user = await getCurrentUser();
+            const noteId = currentNoteId;
+            console.log(noteId)
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/updateNote`, {
                 method: "PATCH",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
+                    "Authorization": `Bearer ${user.idToken}`,
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ title, message })
+                body: JSON.stringify({ title, message, noteId })
             })
             if (response.ok){
                 setOpen(false)
                 setTitle("")
                 setMessage("")
                 setCurrentNoteId("")
+                setEditing(false)
                 getNotes()
             }
         } catch (error) {
@@ -118,13 +123,14 @@ const Dashboard = ({ user }) => {
 
     const deleteNote = async(noteId) => {
         try {
-            const token = await auth.currentUser.getIdToken()
-            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/deleteNote/${noteId}`, {
+            const user = await getCurrentUser();
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/deleteNote`, {
                 method: "DELETE",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
+                    "Authorization": `Bearer ${user.idToken}`,
                     "Content-Type": "application/json"
-                }
+                },
+                body: JSON.stringify({ noteId })
             })
             
             if (response.ok) {
@@ -194,13 +200,13 @@ const Dashboard = ({ user }) => {
                 )}
                 <div className="grid min-[900px]:grid-cols-2 gap-4 grid-cols-1 mb-8">
                     {notes.map((note) => (
-                        <div key={note._id} className="w-120 h-105 max-[1250px]:w-75 max-[1250px]:h-70 max-[430px]:w-65 max-[430px]:h-60 bg-gray-100 font-inter p-8 flex items-center flex-col gap-4 rounded-2xl shadow-2xl">
-                            <h1 className="text-[#787CFF] font-extrabold text-xl max-[1250px]:text-sm text-center truncate w-full h-10">{note.title}</h1>
-                            <p className="text-black font-normal max-[1250px]:text-[10px] w-full h-full overflow-y-scroll pt-3 max-[700px]:pt-0 pb-3 whitespace-pre-wrap">{note.message}</p>
+                        <div key={note.noteId.S} className="w-120 h-105 max-[1250px]:w-75 max-[1250px]:h-70 max-[430px]:w-65 max-[430px]:h-60 bg-gray-100 font-inter p-8 flex items-center flex-col gap-4 rounded-2xl shadow-2xl">
+                            <h1 className="text-[#787CFF] font-extrabold text-xl max-[1250px]:text-sm text-center truncate w-full h-10">{note.title.S}</h1>
+                            <p className="text-black font-normal max-[1250px]:text-[10px] w-full h-full overflow-y-scroll pt-3 max-[700px]:pt-0 pb-3 whitespace-pre-wrap">{note.message.S}</p>
                             <div className="flex w-full h-fit gap-5 items-center">
-                                <h1 className="w-fit rounded-3xl p-4 max-[1250px]:p-2 font-inter font-bold bg-black text-xs max-[1250px]:text-[8px] text-white">{new Date(note.lastUpdated).toLocaleDateString()}</h1>
-                                <FaPencil className="hover:text-[#787CFF] hover:cursor-pointer ml-auto" onClick={() => editNote(note._id, note.title, note.message)} />
-                                <FaRegTrashCan className="hover:text-[#787CFF] hover:cursor-pointer" onClick={() => deleteNote(note._id)} />
+                                <h1 className="w-fit rounded-3xl p-4 max-[1250px]:p-2 font-inter font-bold bg-black text-xs max-[1250px]:text-[8px] text-white">{new Date(note.createdAt.S).toLocaleDateString()}</h1>
+                                <FaPencil className="hover:text-[#787CFF] hover:cursor-pointer ml-auto" onClick={() => editNote(note.noteId.S, note.title.S, note.message.S)} />
+                                <FaRegTrashCan className="hover:text-[#787CFF] hover:cursor-pointer" onClick={() => deleteNote(note.noteId.S)} />
                             </div>
                         </div>
                     ))}

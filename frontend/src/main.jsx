@@ -7,17 +7,24 @@ import Signup from './Signup.jsx'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import Dashboard from './Dashboard.jsx'
 import { useEffect } from 'react'
-import { onAuthStateChanged } from 'firebase/auth'
 import { useState } from 'react'
-import { auth } from './lib/firebaseClient.js'
+import { getCurrentUser } from './lib/cognitoConfig.js'
+
+import { Buffer } from 'buffer'
+window.Buffer = Buffer
+import process from 'process'
+window.process = process
 
 const Root = () => {
   const [user, setUser] = useState(null)
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser)
-    })
-    return unsubscribe
+    getCurrentUser().then(setUser)
+    const interval = setInterval(() => {
+      getCurrentUser().then(setUser)
+    }, 2000)
+
+    return () => clearInterval(interval)
   }, [])
 
 

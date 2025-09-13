@@ -1,8 +1,8 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth"
 import React from "react"
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { auth } from "./lib/firebaseClient"
+import { userPool } from "./lib/cognitoConfig"
+import { CognitoUserAttribute } from "amazon-cognito-identity-js"
 import MainButton from "./components/MainButton"
 
 const Signup = () => {
@@ -12,13 +12,20 @@ const Signup = () => {
     const navigate = useNavigate()
 
     const handleSignup = async(e) => {
-        e.preventDefault()
-        try {
-            await createUserWithEmailAndPassword(auth, email, password)
-            navigate("/")
-        } catch(error) {
-            alert("Sign Up failed: " + error)
-        }
+        e.preventDefault();
+        const attributeList = [
+            new CognitoUserAttribute({ Name: "email", Value: email})
+        ];
+        userPool.signUp(email, password, attributeList, null, (err, result) => {
+            if(err){
+                    alert("Error signing up: " + err);
+                    console.error("Error signing up: ", err)
+            }
+            else {
+                console.log("User " + result.user.getUsername() +  " sucessfully signed up")
+                navigate("/")
+            }
+        })
     }
 
     return (
